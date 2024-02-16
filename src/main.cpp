@@ -1,42 +1,33 @@
-#include <ctime>
-#include <cstdlib>
+#include <iostream>
+#include <memory>
+#include <utility>
 #include <vector>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 
+// start 384, 400
+// end 447, 447
 
-sf::Color getRandomColor() {
-    uint8_t r = std::rand() % 255 + 1;
-    uint8_t g = std::rand() % 255 + 1;
-    uint8_t b = std::rand() % 255 + 1;
-
-    return sf::Color(r, g, b);
-}
 
 int main()
 {
-    std::srand(std::time(nullptr));
+    sf::RenderWindow window(sf::VideoMode(800, 600), 
+                           "Rogalio 2", 
+                           sf::Style::Resize | sf::Style::Titlebar | sf::Style::Close);
+
     
-
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Rogalio 2", sf::Style::Resize | 
-                                                                  sf::Style::Titlebar | 
-                                                                  sf::Style::Close);
-
-    sf::RectangleShape shape(sf::Vector2f(80.f, 80.f));
-    shape.setPosition(sf::Vector2f(40.f, 40.f));
-
-    size_t shapes_num = 5;
-    sf::Vector2f quad_size = sf::Vector2f(40.f, 40.f);
-    sf::Vector2f initial_position = sf::Vector2f(0.f, 0.f);
-
-    sf::RectangleShape** quads = new sf::RectangleShape*[shapes_num];
-    for (size_t i = 0; i < shapes_num; ++i) {
-        quads[i] = new sf::RectangleShape(quad_size);
-        quads[i]->setPosition(initial_position + sf::Vector2f(45.f * i, 0.f));
+    
+    sf::Texture floor_texture;
+    if ( !floor_texture.loadFromFile("level.png", sf::IntRect(736, 208, 40, 40)) )
+    {
+        std::cerr << "ERROR in loading texture from file" << std::endl;
+        exit(4);
     }
 
-    std::vector<sf::RectangleShape> *v_quads = new std::vector<sf::RectangleShape>;
+    sf::Vector2f initial_position{40.f, 40.f};
+    sf::Sprite sprite(floor_texture);
+    sprite.setPosition(initial_position);
 
     while (window.isOpen())
     {
@@ -47,22 +38,13 @@ int main()
                 window.close();
         }
 
-        window.clear();
+        window.clear(sf::Color::White);
 
-        for (size_t i = 0; i < shapes_num; ++i) 
-        {
-            quads[i]->setFillColor(getRandomColor());
-            window.draw(*quads[i]);
-        }
+        window.draw(sprite);
+        
         window.display();
     }
 
-    for (size_t i = 0; i < shapes_num; ++i) 
-    {
-        delete quads[i];
-    }
-
-    delete[] quads;
-
+ 
     return 0;
 }
