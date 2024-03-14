@@ -21,7 +21,7 @@ Game::Game(const std::string& title, size_t width, size_t height) :
 
 Game::~Game()
 {
-
+    delete renderer;
 }
 
 void Game::run()
@@ -39,4 +39,9 @@ void Game::run()
 
         m_window.display();
     }
+}
+
+void Game::render()
+{
+    m_renderer->renderLevel(m_currentLevel);
 }
