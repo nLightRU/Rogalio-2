@@ -8,13 +8,20 @@
 class Renderer
 {
 private:
-	sf::RenderWindow *m_window;
+	sf::RenderWindow *m_Window;
+	sf::Texture* m_floorTexture;
+
+private:
+	bool loadTextures();
 
 public:
 	Renderer();
-	Renderer(int width, int heigth, const std::string& title);
+	Renderer(size_t width, size_t heigth, const std::string& title);
 	~Renderer();
 
+	void render();
 	void renderLevel(const Level& lvl);
+
+	sf::RenderWindow* window() { return m_Window;  }
 };
 

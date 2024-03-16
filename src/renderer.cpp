@@ -7,20 +7,38 @@
 
 Renderer::Renderer() 
 {
-	m_window = new sf::Window(sf::VideoMode(800, 600), "Rogalio 2", DEFAULT_FLAGS);
+	m_Window = new sf::RenderWindow(sf::VideoMode(800, 600), "Rogalio 2", DEFAULT_FLAGS);
 }
 
-Renderer::Renderer(int width, int heigth, const std::string& title)
+Renderer::Renderer(size_t width, size_t heigth, const std::string& title)
 {
-	m_window = new sf::Window(sf::VideoMode(width, heigth), 
+	m_Window = new sf::RenderWindow(sf::VideoMode(width, heigth), 
 								title, DEFAULT_FLAGS);
 }
 
-Renderer::~Renderer()
+bool Renderer::loadTextures() 
 {
+
 }
 
-void Renderer::renderLevel(const Level& lvl)
+Renderer::~Renderer() 
 {
+	delete m_Window;
+}
 
+void Renderer::render()
+{
+    while (m_Window->isOpen())
+    {
+        sf::Event event;
+        while (m_Window->pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                m_Window->close();
+        }
+
+        m_Window->clear(sf::Color::Black);
+
+        m_Window->display();
+    }
 }
