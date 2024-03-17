@@ -6,7 +6,7 @@
 
 int main()
 {
-    Game g("Rogalio 2", 800, 600);
+    Game g("Rogalio 2", 1200, 1000);
     
     g.run();
 

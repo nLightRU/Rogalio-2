@@ -16,6 +16,8 @@
 Renderer::Renderer() 
 {
 	m_Window = new sf::RenderWindow(sf::VideoMode(800, 600), "Rogalio 2", DEFAULT_FLAGS);
+    bool textures_loaded = loadTextures();
+    
 }
 
 Renderer::Renderer(size_t width, size_t heigth, const std::string& title)
@@ -24,7 +26,10 @@ Renderer::Renderer(size_t width, size_t heigth, const std::string& title)
 								title, DEFAULT_FLAGS);
 
     
-
+    m_View = new sf::View(sf::Vector2f(150.f, 100.f), sf::Vector2f(400.f, 400.f));
+    m_View->zoom(0.8f);
+    m_Window->setView(*m_View);
+    
     bool textures_loaded = loadTextures();
 
     if (!textures_loaded)
@@ -47,16 +52,19 @@ bool Renderer::loadTextures()
 
     bool floor_loaded = m_floorTexture->loadFromFile(texturesFile, sf::IntRect(736, 368, 30, 30));
     bool wall_loaded = m_wallTexture->loadFromFile(texturesFile, sf::IntRect(384, 400, 30, 30));
-    bool player_loaded = m_playerTexture->loadFromFile(playerTexture, sf::IntRect(0, 0, 24, 24));
+    bool player_loaded = m_playerTexture->loadFromFile(playerTexture, sf::IntRect(0, 0, 40, 40));
 
     return floor_loaded && wall_loaded;
 }
 
 Renderer::~Renderer() 
 {
+    delete m_Window;
+    delete m_View;
+
     delete m_floorTexture;
     delete m_wallTexture;
-    delete m_Window;
+    delete m_playerTexture;
 }
 
 void Renderer::render()
@@ -68,7 +76,7 @@ void Renderer::render()
     sf::Vector2f start(0.f, 0.f);
 
     sf::Sprite player(*m_playerTexture);
-    player.setPosition(start + sf::Vector2f(50.f, 50.f));
+    player.setPosition(start + sf::Vector2f(150.f, 100.f));
 
     // Room walls top and bottom
     for (size_t i = 0; i < w; ++i) 
@@ -118,9 +126,31 @@ void Renderer::render()
         {
             if (event.type == sf::Event::Closed)
                 m_Window->close();
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            {
+                m_View->move(sf::Vector2f(0.f, -6.f));
+                player.move(sf::Vector2f(0.f, -6.f));
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            {
+                m_View->move(sf::Vector2f(-6.f, 0.f));
+                player.move(sf::Vector2f(-6.f, 0.f));
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            {
+                m_View->move(sf::Vector2f(0.f, 6.f));
+                player.move(sf::Vector2f(0.f, 6.f));
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            {
+                m_View->move(sf::Vector2f(6.f, 0.f));
+                player.move(sf::Vector2f(6.f, 0.f));
+            }
         }
 
         m_Window->clear(sf::Color::Black);
+        m_Window->setView(*m_View);
 
         for (const auto& sprite : sprites)
         {
