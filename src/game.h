@@ -12,6 +12,8 @@ private:
 	const char* m_title;
 	size_t m_width, m_height;
 	
+
+	
 	Renderer *m_renderer;
 	Level* m_currentLevel;
 	
