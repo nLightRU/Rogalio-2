@@ -38,12 +38,17 @@ bool Renderer::loadTextures()
     std::string texturesFile = RES_FOLDER;
     texturesFile += R"(RF_Catacombs_v1.0\mainlevbuild.png)";
 
+    std::string playerTexture = RES_FOLDER;
+    playerTexture += R"(RPG_Hero\idle\idle_down_40x40.png)";
+
     m_floorTexture = new sf::Texture();
     m_wallTexture = new sf::Texture();
+    m_playerTexture = new sf::Texture();
 
     bool floor_loaded = m_floorTexture->loadFromFile(texturesFile, sf::IntRect(736, 368, 30, 30));
     bool wall_loaded = m_wallTexture->loadFromFile(texturesFile, sf::IntRect(384, 400, 30, 30));
-            
+    bool player_loaded = m_playerTexture->loadFromFile(playerTexture, sf::IntRect(0, 0, 24, 24));
+
     return floor_loaded && wall_loaded;
 }
 
@@ -61,6 +66,9 @@ void Renderer::render()
     size_t w = 12, h = 10;
     float sprite_a = 30.f;
     sf::Vector2f start(0.f, 0.f);
+
+    sf::Sprite player(*m_playerTexture);
+    player.setPosition(start + sf::Vector2f(50.f, 50.f));
 
     // Room walls top and bottom
     for (size_t i = 0; i < w; ++i) 
@@ -118,6 +126,8 @@ void Renderer::render()
         {
             m_Window->draw(sprite);
         }
+
+        m_Window->draw(player);
 
         m_Window->display();
     }

@@ -12,6 +12,8 @@ private:
 	sf::Texture* m_floorTexture;
 	sf::Texture* m_wallTexture;
 
+	sf::Texture* m_playerTexture;
+
 private:
 	bool loadTextures();
 
