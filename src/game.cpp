@@ -27,5 +27,7 @@ Game::~Game()
 
 void Game::run()
 {
+    // handle events and input
+    // render
     m_renderer->render();
 }

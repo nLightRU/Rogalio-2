@@ -10,6 +10,7 @@ class Renderer
 private:
 	sf::RenderWindow *m_Window;
 	sf::Texture* m_floorTexture;
+	sf::Texture* m_wallTexture;
 
 private:
 	bool loadTextures();
