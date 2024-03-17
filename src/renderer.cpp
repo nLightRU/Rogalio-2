@@ -42,7 +42,7 @@ bool Renderer::loadTextures()
     m_wallTexture = new sf::Texture();
 
     bool floor_loaded = m_floorTexture->loadFromFile(texturesFile, sf::IntRect(736, 368, 30, 30));
-    bool wall_loaded = m_wallTexture->loadFromFile(texturesFile, sf::IntRect(736, 272, 30, 30));
+    bool wall_loaded = m_wallTexture->loadFromFile(texturesFile, sf::IntRect(384, 400, 30, 30));
             
     return floor_loaded && wall_loaded;
 }
@@ -60,26 +60,44 @@ void Renderer::render()
 
     size_t w = 12, h = 10;
     float sprite_a = 30.f;
-    sf::Vector2f start(30.f, 30.f);
+    sf::Vector2f start(0.f, 0.f);
 
-    // Room walls
-    for (size_t i = 0; i < w; ++i) {
+    // Room walls top and bottom
+    for (size_t i = 0; i < w; ++i) 
+    {
         sf::Sprite s_t(*m_wallTexture);
-        s_t.setPosition(start + sf::Vector2f(sprite_a * i, sprite_a));
+        sf::Vector2f pos_t(sprite_a * i, 0.f);
+        s_t.setPosition(pos_t + start);
         sprites.push_back(std::move(s_t));
 
-        //sf::Sprite s_b(*m_wallTexture);
-        //s_b.setPosition(sf::Vector2f(20.f * i, 20.f * h));
-        //sprites.push_back(std::move(s_b));
+        sf::Sprite s_b(*m_wallTexture);
+        sf::Vector2f pos_b(sprite_a * i, sprite_a * (h - 1));
+        s_b.setPosition(pos_b + start);
+        sprites.push_back(std::move(s_b));
+    }
+
+    // Room walls right and left
+    for (size_t i = 0; i < h - 1; ++i)
+    {
+        sf::Sprite s_l(*m_wallTexture);
+        sf::Vector2f pos_l(0, sprite_a * i);
+        s_l.setPosition(pos_l + start);
+        sprites.push_back(std::move(s_l));
+
+        sf::Sprite s_r(*m_wallTexture);
+        sf::Vector2f pos_r(sprite_a * (w - 1), sprite_a * i);
+        s_r.setPosition(pos_r + start);
+        sprites.push_back(std::move(s_r));
     }
 
     // Room inner space
-    for (size_t i = 1; i < h - 2; ++i) 
+    for (size_t i = 1; i < h - 1; ++i) 
     {
         for (size_t j = 1; j < w - 1; ++j)
         {
             sf::Sprite s(*m_floorTexture);
-            s.setPosition(start + sf::Vector2f(sprite_a * j, sprite_a * i));
+            sf::Vector2f pos(sprite_a * j, sprite_a * i);
+            s.setPosition(pos + start);
             sprites.push_back(std::move(s));
         }
     }
